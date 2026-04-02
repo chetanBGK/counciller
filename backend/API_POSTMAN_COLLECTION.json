@@ -1,0 +1,856 @@
+{
+  "info": {
+    "_postman_id": "ward-super-admin-api",
+    "name": "Ward Admin & Super Admin API",
+    "description": "Complete API collection for Ward Admin and Super Admin React applications",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+91 9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/send-otp",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "send-otp"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"+91 9876543210\"\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/send-otp",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["auth", "send-otp"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP sent successfully\",\n  \"data\": {\n    \"phone\": \"+91 9876543210\",\n    \"expires_in\": 300\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+91 9876543210\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/verify-otp",
+              "host": ["{{BASE_URL}}"],
+              "path": ["auth", "verify-otp"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"+91 9876543210\",\n  \"otp\": \"123456\"\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/auth/verify-otp",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["auth", "verify-otp"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"OTP verified successfully\",\n  \"data\": {\n    \"user_id\": 1,\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"role\": \"councillor_admin\",\n    \"name\": \"Admin User\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/dashboard-stats",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "dashboard-stats"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/dashboard-stats",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "dashboard-stats"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Dashboard stats retrieved\",\n  \"data\": {\n    \"total_complaints\": 1247,\n    \"total_categories\": 12,\n    \"pending_review\": 38,\n    \"recent_complaints\": [\n      {\n        \"complaint_id\": \"CMP234567\",\n        \"category\": \"Street Lights\",\n        \"status\": \"IN_PROGRESS\",\n        \"time\": \"5 min ago\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Categories",
+      "item": [
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/category",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "category"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/category",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "category"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Categories fetched successfully\",\n  \"data\": [\n    {\n      \"category_id\": 1,\n      \"category_name\": \"Street Lights\",\n      \"total_complaints\": 156,\n      \"phone_number\": \"9588343566\"\n    },\n    {\n      \"category_id\": 2,\n      \"category_name\": \"Roads & Potholes\",\n      \"total_complaints\": 234,\n      \"phone_number\": \"9588343566\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_name\": \"Street Cleaning\",\n  \"phone_number\": \"9588343566\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/admin/category",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "category"]
+            }
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category_name\": \"Street Cleaning\",\n  \"phone_number\": \"9588343566\"\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/category",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "category"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Category created successfully\",\n  \"data\": {\n    \"id\": 5,\n    \"name\": \"Street Cleaning\",\n    \"phone_number\": \"9588343566\",\n    \"created_at\": \"2025-12-29T10:00:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_name\": \"Street Cleaning Updated\",\n  \"phone_number\": \"9588343567\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/admin/category/5",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "category", "5"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/category/5",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "category", "5"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Citizens",
+      "item": [
+        {
+          "name": "Get Citizens List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/users?role=citizen&limit=20&offset=0",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "users"],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "citizen"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/users?role=citizen&limit=20&offset=0",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "users"],
+                  "query": [
+                    {
+                      "key": "role",
+                      "value": "citizen"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Citizens fetched successfully\",\n  \"data\": [\n    {\n      \"citizen_id\": 1,\n      \"name\": \"Rajesh Sharma\",\n      \"phone_number\": \"+91 9876543210\",\n      \"ward\": \"Ward 15\",\n      \"email\": \"rajesh@gmail.com\"\n    },\n    {\n      \"citizen_id\": 2,\n      \"name\": \"Priya Desai\",\n      \"phone_number\": \"+91 9876543211\",\n      \"ward\": \"Ward 12\",\n      \"email\": \"priya@gmail.com\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Citizen Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/userdetails?id=1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "userdetails"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/userdetails?id=1",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "userdetails"],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Citizen details fetched successfully\",\n  \"data\": {\n    \"citizen_id\": 1,\n    \"name\": \"Rajesh Sharma\",\n    \"phone_number\": \"+91 9876543210\",\n    \"email\": \"rajesh@gmail.com\",\n    \"ward\": \"Ward 15\",\n    \"aadhar_number\": \"7539 4665 4574\",\n    \"city\": \"Chennai\",\n    \"state\": \"Tamil Nadu\",\n    \"blood_group\": \"O+ve\",\n    \"disability\": \"None\",\n    \"language\": \"English\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Complaints",
+      "item": [
+        {
+          "name": "Get Ward Complaints",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/complaints/my?councillorId=1&limit=20&offset=0",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "complaints", "my"],
+              "query": [
+                {
+                  "key": "councillorId",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "IN_PROGRESS",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "Street Lights",
+                  "disabled": true
+                },
+                {
+                  "key": "ward",
+                  "value": "15",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/complaints/my?councillorId=1&limit=20&offset=0",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "complaints", "my"],
+                  "query": [
+                    {
+                      "key": "councillorId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Complaints fetched successfully\",\n  \"data\": [\n    {\n      \"complaint_id\": \"CMP234567\",\n      \"category\": \"Street Lights\",\n      \"summary\": \"Broken street light on MG Road\",\n      \"status\": \"IN_PROGRESS\",\n      \"ward\": \"Ward 15\",\n      \"date\": \"2024-12-05\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Complaint Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/complaints/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["complaints", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Complaint Timeline",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/complaints/timeline/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["complaints", "timeline", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/complaints/timeline/1",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["complaints", "timeline", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Timeline retrieved\",\n  \"data\": [\n    {\n      \"status\": \"SUBMITTED\",\n      \"at\": \"2024-12-05T10:30:00Z\"\n    },\n    {\n      \"status\": \"IN_PROGRESS\",\n      \"at\": \"2024-12-05T11:00:00Z\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Officers",
+      "item": [
+        {
+          "name": "Get Officers List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/officers",
+              "host": ["{{BASE_URL}}"],
+              "path": ["officers"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/officers",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["officers"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Officers fetched successfully\",\n  \"data\": [\n    {\n      \"officer_id\": 1,\n      \"name\": \"Rajesh Sharma\",\n      \"phone_number\": \"+91 9876543210\"\n    },\n    {\n      \"officer_id\": 2,\n      \"name\": \"Amit Kumar\",\n      \"phone_number\": \"+91 9876543211\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin - Councillors (Super Admin)",
+      "item": [
+        {
+          "name": "Get Councillors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/councillors",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "councillors"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/councillors",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "councillors"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Councillors fetched successfully\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Rajesh Sharma\",\n      \"phone\": \"+91 9876543210\",\n      \"ward\": \"Ward 15\",\n      \"status\": \"active\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Priya Desai\",\n      \"phone\": \"+91 9876543211\",\n      \"ward\": \"Ward 12\",\n      \"status\": \"active\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Councillor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amit Kumar\",\n  \"phone\": \"+91 9876543212\",\n  \"ward\": 8\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/admin/councillors",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "councillors"]
+            }
+          },
+          "response": [
+            {
+              "name": "Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Amit Kumar\",\n  \"phone\": \"+91 9876543212\",\n  \"ward\": 8\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/admin/councillors",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["admin", "councillors"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Councillor created successfully\",\n  \"data\": {\n    \"id\": 3,\n    \"name\": \"Amit Kumar\",\n    \"phone\": \"+91 9876543212\",\n    \"ward\": 8,\n    \"status\": \"active\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Councillor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rajesh Sharma\",\n  \"phone\": \"+91 9876549999\",\n  \"ward\": 20\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/admin/councillors/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "councillors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Councillor",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/admin/councillors/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["admin", "councillors", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Councillor - Actions",
+      "item": [
+        {
+          "name": "Approve Complaint",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/councillor/approve/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["councillor", "approve", "1"]
+            }
+          }
+        },
+        {
+          "name": "Mark In Progress",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/councillor/in-progress/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["councillor", "in-progress", "1"]
+            }
+          }
+        },
+        {
+          "name": "Mark Completed",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolution_note\": \"Issue resolved successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/councillor/complete/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["councillor", "complete", "1"]
+            }
+          }
+        },
+        {
+          "name": "Confirm Resolution",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolution_note\": \"Issue resolved successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/councillor/confirm/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["councillor", "confirm", "1"]
+            }
+          }
+        },
+        {
+          "name": "Add Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Internal note about the complaint\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/councillor/note/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["councillor", "note", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI - Summary",
+      "item": [
+        {
+          "name": "Get Complaint Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/ai/summary/1",
+              "host": ["{{BASE_URL}}"],
+              "path": ["ai", "summary", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/ai/summary/1",
+                  "host": ["{{BASE_URL}}"],
+                  "path": ["ai", "summary", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"message\": \"Summary generated\",\n  \"data\": {\n    \"summary\": \"Issue related to Street Lights. Assigned to Ward 15. Estimated resolution in 2–3 days.\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "TOKEN",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

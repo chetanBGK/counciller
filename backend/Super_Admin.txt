@@ -1,0 +1,29 @@
+Super Admin - Implemented API Endpoints
+
+Base path: /api (server root http://localhost:3000)
+
+Councillor Management (Super Admin):
+
+1) Get Councillors
+- GET /api/admin/councillors
+  - Headers: Authorization: Bearer <token>
+  - Response: { success, message, data: [ { id, name, phone, ward, status } ] }
+
+2) Create Councillor
+- POST /api/admin/councillors
+  - Body: { name, phone, ward }
+  - Response (201): { success, message: 'Councillor created successfully', data: { id, name, phone, ward, status } }
+
+3) Update Councillor
+- PUT /api/admin/councillors/:id
+  - Body: { name, phone, ward }
+  - Response: { success, message: 'Councillor updated successfully', data: { id, name, phone, ward, status } }
+
+4) Delete Councillor
+- DELETE /api/admin/councillors/:id
+  - Response: { success, message: 'Councillor deleted successfully' }
+
+Notes:
+- All endpoints require `Authorization: Bearer <token>` and `councillor_admin` role.
+- Phone uniqueness and ward existence are validated server-side.
+- Responses use the project's common wrapper: { success, message, data }.

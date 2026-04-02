@@ -1,0 +1,809 @@
+openapi: 3.0.0
+info:
+  title: Ward Admin & Super Admin API
+  description: Complete REST API for Ward Admin and Super Admin management system
+  version: 1.0.0
+  contact:
+    name: API Support
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://api.example.com/api
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User login and authentication
+  - name: Dashboard
+    description: Dashboard statistics and metrics
+  - name: Categories
+    description: Complaint category management
+  - name: Citizens
+    description: Citizen/user management
+  - name: Complaints
+    description: Complaint management and tracking
+  - name: Officers
+    description: Officer/employee management
+  - name: Councillors
+    description: Councillor management (Super Admin)
+  - name: Councillor Actions
+    description: Councillor complaint actions
+  - name: AI
+    description: AI-powered features
+
+paths:
+  /auth/send-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Send OTP to phone
+      description: Sends a one-time password to the user's phone number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+              properties:
+                phone:
+                  type: string
+                  format: phone
+                  example: "+91 9876543210"
+      responses:
+        "200":
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "OTP sent successfully"
+                  data:
+                    type: object
+                    properties:
+                      phone:
+                        type: string
+                      expires_in:
+                        type: number
+                        example: 300
+
+  /auth/verify-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify OTP and get token
+      description: Verifies the OTP and returns JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phone
+                - otp
+              properties:
+                phone:
+                  type: string
+                  format: phone
+                  example: "+91 9876543210"
+                otp:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: OTP verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                      token:
+                        type: string
+                        description: JWT token for API requests
+                      role:
+                        type: string
+                        enum: [citizen, councillor, councillor_admin, operator]
+                      name:
+                        type: string
+
+  /admin/dashboard-stats:
+    get:
+      tags:
+        - Dashboard
+      summary: Get dashboard statistics
+      description: Returns dashboard metrics including complaint counts and recent complaints
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard stats retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total_complaints:
+                        type: integer
+                        example: 1247
+                      total_categories:
+                        type: integer
+                        example: 12
+                      pending_review:
+                        type: integer
+                        example: 38
+                      recent_complaints:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            complaint_id:
+                              type: string
+                            category:
+                              type: string
+                            status:
+                              type: string
+                            time:
+                              type: string
+
+  /admin/category:
+    get:
+      tags:
+        - Categories
+      summary: List all categories
+      description: Returns all complaint categories with complaint counts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Categories retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        category_id:
+                          type: integer
+                        category_name:
+                          type: string
+                        total_complaints:
+                          type: integer
+                        phone_number:
+                          type: string
+
+    post:
+      tags:
+        - Categories
+      summary: Create new category
+      description: Creates a new complaint category
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - category_name
+              properties:
+                category_name:
+                  type: string
+                  example: "Street Cleaning"
+                phone_number:
+                  type: string
+                  example: "9588343566"
+      responses:
+        "201":
+          description: Category created
+        "400":
+          description: Validation error
+
+  /admin/category/{id}:
+    put:
+      tags:
+        - Categories
+      summary: Update category
+      description: Updates an existing category
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category_name:
+                  type: string
+                phone_number:
+                  type: string
+      responses:
+        "200":
+          description: Category updated
+
+    delete:
+      tags:
+        - Categories
+      summary: Delete category
+      description: Deletes a category
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Category deleted
+
+  /admin/users:
+    get:
+      tags:
+        - Citizens
+      summary: List citizens
+      description: Returns paginated list of citizens
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: role
+          in: query
+          schema:
+            type: string
+            default: citizen
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Citizens list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        citizen_id:
+                          type: integer
+                        name:
+                          type: string
+                        phone_number:
+                          type: string
+                        ward:
+                          type: string
+                        email:
+                          type: string
+                        city:
+                          type: string
+                        state:
+                          type: string
+
+  /admin/userdetails:
+    get:
+      tags:
+        - Citizens
+      summary: Get citizen details
+      description: Returns full profile of a citizen
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Citizen details retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      citizen_id:
+                        type: integer
+                      name:
+                        type: string
+                      phone_number:
+                        type: string
+                      email:
+                        type: string
+                      ward:
+                        type: string
+                      aadhar_number:
+                        type: string
+                      city:
+                        type: string
+                      state:
+                        type: string
+                      address:
+                        type: string
+                      blood_group:
+                        type: string
+                      disability:
+                        type: string
+                      language:
+                        type: string
+
+  /admin/complaints/my:
+    get:
+      tags:
+        - Complaints
+      summary: Get ward-specific complaints
+      description: Returns complaints for a specific councillor/ward
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: councillorId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: ward
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Complaints retrieved
+
+  /complaints/{id}:
+    get:
+      tags:
+        - Complaints
+      summary: Get complaint details
+      description: Returns full details of a complaint
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint details
+
+  /complaints/timeline:
+    get:
+      tags:
+        - Complaints
+      summary: Get status stages
+      description: Returns available complaint status stages
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Status stages retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["SUBMITTED", "SEEN", "IN_PROGRESS", "RESOLVED"]
+
+  /complaints/timeline/{complaintId}:
+    get:
+      tags:
+        - Complaints
+      summary: Get complaint timeline
+      description: Returns status change history for a complaint
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: complaintId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Timeline retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                        at:
+                          type: string
+                          format: date-time
+
+  /officers:
+    get:
+      tags:
+        - Officers
+      summary: Get officers list
+      description: Returns all officers/employees
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Officers retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        officer_id:
+                          type: integer
+                        name:
+                          type: string
+                        phone_number:
+                          type: string
+
+  /admin/councillors:
+    get:
+      tags:
+        - Councillors
+      summary: List councillors
+      description: Returns all councillors (Super Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Councillors retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        phone:
+                          type: string
+                        ward:
+                          type: string
+                        status:
+                          type: string
+                          enum: [active, inactive]
+
+    post:
+      tags:
+        - Councillors
+      summary: Create councillor
+      description: Creates a new councillor (Super Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - phone
+                - ward
+              properties:
+                name:
+                  type: string
+                  example: "Amit Kumar"
+                phone:
+                  type: string
+                  example: "+91 9876543212"
+                ward:
+                  type: integer
+                  example: 8
+      responses:
+        "201":
+          description: Councillor created
+
+  /admin/councillors/{id}:
+    put:
+      tags:
+        - Councillors
+      summary: Update councillor
+      description: Updates councillor details (Super Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: string
+                ward:
+                  type: integer
+      responses:
+        "200":
+          description: Councillor updated
+
+    delete:
+      tags:
+        - Councillors
+      summary: Delete councillor
+      description: Deletes/deactivates a councillor (Super Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Councillor deleted
+
+  /councillor/approve/{id}:
+    put:
+      tags:
+        - Councillor Actions
+      summary: Approve complaint
+      description: Marks complaint as approved/seen
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint approved
+
+  /councillor/in-progress/{id}:
+    put:
+      tags:
+        - Councillor Actions
+      summary: Mark as in-progress
+      description: Marks complaint as in-progress
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint marked in-progress
+
+  /councillor/complete/{id}:
+    put:
+      tags:
+        - Councillor Actions
+      summary: Mark as completed
+      description: Marks complaint as completed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution_notes:
+                  type: string
+      responses:
+        "200":
+          description: Complaint completed
+
+  /councillor/confirm/{id}:
+    put:
+      tags:
+        - Councillor Actions
+      summary: Confirm resolution
+      description: Marks complaint as confirmed/resolved
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution_note:
+                  type: string
+      responses:
+        "200":
+          description: Complaint confirmed
+
+  /councillor/note/{id}:
+    post:
+      tags:
+        - Councillor Actions
+      summary: Add note
+      description: Adds internal note to complaint
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - note
+              properties:
+                note:
+                  type: string
+      responses:
+        "200":
+          description: Note added
+
+  /ai/summary/{complaintId}:
+    get:
+      tags:
+        - AI
+      summary: Get AI summary
+      description: Generates AI-powered summary for a complaint
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: complaintId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Summary generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      summary:
+                        type: string
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from /auth/verify-otp endpoint

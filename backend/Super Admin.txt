@@ -1,0 +1,74 @@
+The frontend currently uses the following fields: 
+id, 
+name, phone, ward, status -Common Headers (All APIs) 
+Authorization: Bearer <token> 
+Content-Type: application/json 
+Ll Get Councillors List 
+Endpoint 
+GET /admin/councillors 
+Success Response (200) 
+{ 
+"success": true, 
+"message": "Councillors fetched successfully”, 
+"data": [ 
+{ 
+), 
+{
+id": 1, 
+‘name": "Rajesh Sharma’, 
+"phone": "+91 9876543210, 
+"ward": "Ward 15", 
+"status": 
+"active" 
+"id": 2, 
+"name": "Priya Desai", 
+"phone": "+91 9876543211, 
+"ward": "Ward 12", 
+"status": 
+"inactive" 
+} 
+] 
+} 
+Create Councillor 
+Endpoint 
+POST /admin/councillors 
+Description 
+Create a new councillor from Super Admin panel. 
+Request Body 
+{ 
+} 
+"name": "Amit Kumar", 
+"phone": "+91 9876543212", 
+"ward": "Ward 8" 
+Success Response (201)
+{ 
+} 
+"'success": true, 
+"message": "Councillor created successfully”, 
+"data": { 
+"id": 3, 
+"name"; "Amit Kumar", 
+"phone": "+91 9876543212", 
+"ward": "Ward 8", 
+"status": 
+} 
+k&l 
+"active" 
+Update Councillor (Edit) 
+Endpoint 
+PUT /admin/councillors/:id 
+Description 
+Update councillor details from edit modal. 
+Request Body 
+{ 
+"name": "Rajesh Sharma’, 
+"phone": "+91 9876549999,
+"ward": "Ward 20" 
+} 
+Success Response (200) 
+{ 
+} 
+"success": true, 
+'message": "Councillor updated successfully" -Status Values (Used in Ul) 
+active 
+inactive

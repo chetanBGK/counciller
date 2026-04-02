@@ -1,0 +1,47 @@
+{
+  "name": "councillor-app-backend",
+  "version": "1.0.0",
+  "description": "Councillor App Backend - Node.js + Express + PostgreSQL",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1013.0",
+    "@aws-sdk/s3-request-presigner": "^3.958.0",
+    "@turf/turf": "^6.5.0",
+    "aws-sdk": "^2.1693.0",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
+    "bullmq": "^5.66.3",
+    "cloudinary": "^1.37.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "fast-xml-parser": "^4.1.0",
+    "firebase-admin": "^12.6.0",
+    "helmet": "^7.2.0",
+    "json2csv": "^5.0.7",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
+    "node-cron": "^4.2.1",
+    "openai": "^6.16.0",
+    "pdfkit": "^0.16.0",
+    "pg": "^8.16.3",
+    "streamifier": "^0.1.1",
+    "uuid": "^13.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

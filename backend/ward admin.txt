@@ -1,0 +1,359 @@
+Dashboard API Documentation  
+ 
+
+  "success": true, 
+  "message": "Dashboard data fetched successfully", 
+  "data": { 
+    "total_complaints": 1247, 
+    "total_categories": 12, 
+    "pending_review": 38, 
+    "recent_complaints": [ 
+      { 
+        "complaint_id": "CMP234567", 
+        "category": "Street Lights", 
+        "status": "IN_PROGRESS", 
+        "time": "5 min ago" 
+      }, 
+      { 
+        "complaint_id": "CMP234568", 
+        "category": "Garbage Collection", 
+        "status": "COMPLETED", 
+        "time": "12 min ago" 
+Get Dashboard
+Endpoint:  `GET /admin/dashboard-stats` 
+Headers:Authorization: Bearer <token>
+Response:
+{
+      }, 
+      { 
+        "complaint_id": "CMP234569", 
+        "category": "Water Supply", 
+        "status": "SUBMITTED", 
+        "time": "23 min ago" 
+      }, 
+      { 
+        "complaint_id": "CMP234570", 
+        "category": "Roads & Potholes", 
+        "status": "IN_PROGRESS", 
+        "time": "1 hour ago" 
+      } 
+    ] 
+  } 
+} 
+ 
+ 
+2} Categories  
+ 
+ 
+   
+  
+       Response: 
+{ 
+Get Categories List
+Endpoint: `GET /admin/category`
+Headers:Authorization: Bearer <token>
+  "success": true, 
+  "message": "Categories fetched successfully", 
+  "data": [ 
+    { 
+      "category_id": 1, 
+      "category_name": "Street Lights", 
+      "total_complaints": 156, 
+      "phone_number": "9588343566" 
+    }, 
+    { 
+      "category_id": 2, 
+      "category_name": "Roads & Potholes", 
+      "total_complaints": 234, 
+      "phone_number": "9588343566" 
+    }, 
+    { 
+      "category_id": 3, 
+      "category_name": "Garbage Collection", 
+      "total_complaints": 189, 
+      "phone_number": "9588343566" 
+    }, 
+    { 
+      "category_id": 4, 
+      "category_name": "Water Supply", 
+      "total_complaints": 98, 
+"phone_number": "9588343566" 
+} 
+] 
+} 
+// Create Category
+Endpoint: `POST /admin/category`
+Headers: Authorization: Bearer <token>
+Content-Type: application/json
+Request:
+{
+"category_name": "Street Cleaning",
+"phone_number": "9588343566"
+}
+Response: 
+{ 
+} 
+"success": true, 
+"message": "Category created successfully" 
+// Update Category 
+Endpoint: `PUT /admin/category`
+Headers: Authorization: Bearer <token>
+Content-Type: application/json 
+Request: 
+{ 
+"category_name": "Street Cleaning", 
+"phone_number": "9588343566" 
+} 
+Response: 
+{ 
+} 
+"success": true, 
+"message": "Category updated successfully" 
+// Delete Category
+Endpoint: `DELETE /admin/category`
+Headers: Authorization: Bearer <token>
+Response: 
+{ 
+} 
+"success": true, 
+"message": "Category deleted successfully"\ 
+3]  Get Citizens List 
+Endpoint: `GET /admin/users?role=citizen`
+Headers: Authorization: Bearer <token>
+Request: no request body 
+Response: 
+{ 
+  "success": true, 
+  "message": "Citizens fetched successfully", 
+  "data": [ 
+    { 
+      "citizen_id": 1, 
+      "name": "Rajesh Sharma", 
+      "phone_number": "+91 9876543210", 
+      "ward": "Ward 15", 
+      "email": "rajesh@gmail.com" 
+    }, 
+    { 
+      "citizen_id": 2, 
+      "name": "Priya Desai", 
+      "phone_number": "+91 9876543211", 
+      "ward": "Ward 12", 
+      "email": "priya@gmail.com" 
+    } 
+   
+ 
+ 
+ 
+ 
+]
+}
+// Get Citizen Details
+Endpoint:  `GET /admin/userdetails?id=userid
+Headers: Authorization: Bearer <token>
+Request: no request body 
+Response: 
+{ 
+} 
+"success": true, 
+"message": "Citizen details fetched successfully", 
+"data": { 
+"name": "Rajesh Sharma", 
+"phone_number": "+91 9876543210", 
+"email": "rajesh@gmail.com", 
+"ward": "Ward 15", 
+"aadhar_number": "7539 4665 4574", 
+"city": "Chennai", 
+"state": "Tamil Nadu", 
+"blood_group": "O+ve", 
+"disability": "None", 
+"language": "English" 
+} 
+4] Complaints 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  "success": true, 
+  "message": "Complaints fetched successfully", 
+  "data": [ 
+    { 
+      "complaint_id": "CMP234567", 
+      "category": "Street Lights", 
+      "summary": "Broken street light on MG Road", 
+      "status": "IN_PROGRESS", 
+      "ward": "Ward 15", 
+      "date": "2024-12-05" 
+    }, 
+    { 
+      "complaint_id": "CMP234568", 
+      "category": "Garbage Collection", 
+      "summary": "Garbage not collected for 3 days", 
+      "status": "SUBMITTED", 
+1. Get Complaints List
+Endpoint: `GET /admin/complaints/my?councillorId=id&limit
+=20&offset=0`
+Headers:Authorization: Bearer <token>Query 
+Parameters (optional):
+status
+category
+ward
+date
+Response:
+{
+      "ward": "Ward 12", 
+      "date": "2024-12-05" 
+    }, 
+    { 
+      "complaint_id": "CMP234569", 
+      "category": "Water Supply", 
+      "summary": "No water supply since morning", 
+      "status": "COMPLETED", 
+      "ward": "Ward 8", 
+      "date": "2024-12-04" 
+    } 
+  ] 
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  "success": true, 
+  "message": "Complaint details fetched successfully", 
+  "data": { 
+    "complaint_id": "CMP234567", 
+    "category": "Street Lights", 
+Get Complaint Details (Action → View)
+Endpoint: GET /complaints/:complaintId`
+Headers:
+Authorization: Bearer <token>
+Response:
+{
+"title": "Broken street light on MG Road", 
+"description": "The street light near Shop No. 45 has been broken for 3 
+days", 
+"status": "IN_PROGRESS", 
+"date": "2024-12-05", 
+"location": "MG Road, Ward 15", 
+"citizen": { 
+"name": "Rahul Sharma", 
+"phone": "+91 9876543210" 
+} 
+} 
+} 
+Endpoint: GET /complaints/timeline
+Authorization: Bearer <token>Response:
+{
+} 
+/
+/ Complaint Progress Timeline
+Headers:
+"success": true, 
+"data": [ 
+"SUBMITTED", 
+"SEEN", 
+"IN_PROGRESS" 
+] 
+// Update Complaint Status (Quick Actions)a) Mark 
+as Seen
+Endpoint: `PUT /councillor/approve/:complaintid
+`
+Response:
+{
+} 
+"success": true, 
+"message": "Complaint marked as seen" 
+//Mark In Progress
+Endpoint: `PUT /councillor/in-progress/:complaintid`
+Response:
+{
+"success": true,
+"message": "Complaint marked in progress"}
+c) Mark Completed
+Endpoint: `PUT /councillor/confirm/:complaintid`
+Request:
+{
+} 
+"resolution_note": "Issue resolved successfully" 
+Response: 
+{ 
+"success": true, 
+"message": "Complaint marked as completed" 
+} 
+// AI Summary (Auto Generated)
+Endpoint: GET /ai/summary/: complaintId
+Headers:
+Authorization: Bearer <token>
+Response:
+{
+"success": true, 
+"summary": "Issue related to Street Lights. Assigned to Ward 15. 
+Estimated resolution in 2–3 days." 
+} 
+5] Officers 
+Get Officers List 
+Endpoint: 
+GET /officers 
+Headers: 
+Authorization: Bearer <token> 
+Request: 
+No request body 
+Response: 
+{ 
+  "success": true, 
+  "message": "Officers fetched successfully", 
+  "data": [ 
+    { 
+      "officer_id": 1, 
+      "name": "Rajesh Sharma", 
+      "phone_number": "+91 9876543210" 
+    }, 
+    { 
+      "officer_id": 2, 
+      "name": "Amit Kumar", 
+      "phone_number": "+91 9876543211" 
+    }, 
+    { 
+      "officer_id": 3, 
+      "name": "Sneha Patel", 
+      "phone_number": "+91 9876543212" 
+    }, 
+    { 
+      "officer_id": 4, 
+      "name": "Vijay Singh", 
+      "phone_number": "+91 9876543213" 
+    } 
+] 
+} 
+6] Create Event 
+Endpoint: `POST /admin/announcement`
+➤ Headers 
+Authorization: Bearer <token> 
+Content-Type: multipart/form-data 
+➤ Request Schema (Keys Mapping) 
+event_name    : string   (required) 
+category_id  : number   (required) 
+description  : string   (required) 
+photos[]     : file[]   (optional, max 5 images) 
+➤ Success Response (201) 
+{ 
+} 
+"success": true, 
+"message": "Event created successfully" 
+➤ Error Response (400 / 401) 
+{ 
+} 
+"success": false, 
+"message": "Validation failed", 
+"errors": { 
+"event_name": "Event name is required", 
+"category_id": "Invalid category selected" 
+} 
